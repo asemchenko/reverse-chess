@@ -36,12 +36,12 @@ public class Chessboard {
     }
 
     @Nullable
-    private Chessman get(@NotNull Position position) {
+    public Chessman get(@NotNull Position position) {
         // FIXME invalid indexation. Should be postion.getIndex() instead of getPosition()
         return board[position.getCharPosition()][position.getNumericPosition()];
     }
 
-    private void set(@NotNull Position position, Chessman value) {
+    public void set(@NotNull Position position, Chessman value) {
         board[position.getCharPosition()][position.getNumericPosition()] = value;
     }
 

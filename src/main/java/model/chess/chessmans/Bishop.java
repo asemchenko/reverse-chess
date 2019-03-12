@@ -13,7 +13,7 @@ public class Bishop extends Chessboard.Chessman {
 
     @Override
     public boolean canBeMoved(Position dst) {
-        return checkForLegalMove(dst) && checkForFreeRoute(dst);
+        return checkForLegalMove(dst) && checkForFreeRoute(dst) && checkForRightEnemy(dst);
     }
 
     /**
@@ -24,7 +24,9 @@ public class Bishop extends Chessboard.Chessman {
      * @return the result of check
      */
     private boolean checkForLegalMove(@NotNull Position dst) {
-        return position.numericDistance(dst) == position.charDistance(dst);
+        int numD = position.numericDistance(dst);
+        int charD = position.charDistance(dst);
+        return (numD == charD) && (numD != 0);
     }
 
     /**

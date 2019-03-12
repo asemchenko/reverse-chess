@@ -3,9 +3,21 @@ package model.chess;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Objects;
+import java.util.*;
 
 public class Position {
+    private static final List<Position> ALL_POSITIONS;
+
+    static {
+        List<Position> list = new ArrayList<>();
+        for (int i = 1; i <= 8; i++) {
+            for (int j = 1; j <= 8; j++) {
+                list.add(new Position(i, j));
+            }
+        }
+        ALL_POSITIONS = Collections.unmodifiableList(list);
+    }
+
     private int charPosition;
     private int numericPosition;
 
@@ -14,9 +26,17 @@ public class Position {
         setNumericPosition(numericPosition);
     }
 
+    public Position(char charPosition, int numericPosition) {
+        this(charPosition - 'a' + 1, numericPosition);
+    }
+
     public Position(@NotNull Position that) {
         setCharPosition(that.getCharPosition());
         setNumericPosition(that.getNumericPosition());
+    }
+
+    public static Collection<Position> getAllPossiblePositions() {
+        return ALL_POSITIONS;
     }
 
     public int getCharPosition() {
@@ -26,7 +46,9 @@ public class Position {
     public void setCharPosition(int charPosition) {
         // FIXME hardcoded 8
         // TODO add check: charPosition must be greater than 0
-        Objects.checkIndex(charPosition, 8);
+        if (charPosition <= 0 || charPosition > 8) {
+            throw new IndexOutOfBoundsException("Invalid char value of position: " + charPosition);
+        }
         this.charPosition = charPosition;
     }
 
@@ -37,7 +59,9 @@ public class Position {
     public void setNumericPosition(int numericPosition) {
         // FIXME hardcoded 8
         // TODO add check: numeric must be greater than 0
-        Objects.checkIndex(numericPosition, 8);
+        if (numericPosition <= 0 || numericPosition > 8) {
+            throw new IndexOutOfBoundsException("Invalid numeric value of position: " + numericPosition);
+        }
         this.numericPosition = numericPosition;
     }
 
@@ -62,6 +86,14 @@ public class Position {
         setCharPosition(getCharPosition() + charOffset);
     }
 
+    public int getCharIndex() {
+        return getCharPosition() - 1;
+    }
+
+    public int getNumericIndex() {
+        return getNumericPosition() - 1;
+    }
+
     @Contract(value = "null -> false", pure = true)
     @Override
     public boolean equals(Object o) {
@@ -75,6 +107,11 @@ public class Position {
     @Override
     public int hashCode() {
         return Objects.hash(getCharPosition(), getNumericPosition());
+    }
+
+    @Override
+    public String toString() {
+        return String.format("{Position %c:%d}", 'a' + getCharIndex(), getNumericPosition());
     }
 
     /* TODO add getters
