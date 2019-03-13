@@ -36,10 +36,10 @@ public class Queen extends Chessman {
     public boolean checkForRookFreeRoute(Position dst) {
         int charOffset = Integer.signum(dst.charSubstract(position));
         int numOffset = Integer.signum(dst.numericSubstract(position));
-        Position p = new Position(position);
-        p.move(charOffset, numOffset);
-        for (; !p.equals(dst); p.move(charOffset, numOffset)) {
-            if (get(p) != null) return false;
+        Position src = new Position(position);
+        src.move(charOffset, numOffset);
+        for (; !src.equals(dst); src.move(charOffset, numOffset)) {
+            if (get(src) != null) return false;
         }
         return true;
     }
@@ -57,9 +57,9 @@ public class Queen extends Chessman {
     private boolean checkForBishopFreeRoute(@NotNull Position dst) {
         int charDirection = Integer.signum(dst.charSubstract(position));
         int numDirection = Integer.signum(dst.numericSubstract(position));
-        Position p = new Position(position);
-        for (p.move(charDirection, numDirection); !p.equals(dst); p.move(charDirection, numDirection)) {
-            if (get(p) != null) {
+        Position src = new Position(position);
+        for (src.move(charDirection, numDirection); !src.equals(dst); src.move(charDirection, numDirection)) {
+            if (get(src) != null) {
                 return false;
             }
         }
