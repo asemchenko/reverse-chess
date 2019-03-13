@@ -20,7 +20,6 @@ public class Bishop extends Chessman {
     protected boolean isReachable(@NotNull Position dst) {
         int numD = position.numericDistance(dst);
         int charD = position.charDistance(dst);
-        return (numD == charD)
-                && (numD != 0); // avoiding moving to the current position
+        return numD == charD;
     }
 }

@@ -26,14 +26,21 @@ public abstract class Chessman {
     @Nullable
     public final Iterable<Position> getRouteTo(Position dst) {
         // FIXME как лучше назвать этот метод? Он возвращает путь, исключая крайние точки
-        if (!isReachable(dst)) {
+        if (!canBeMovedTo(dst)) {
             return null;
         }
         return () -> route(dst);
     }
 
+    public boolean canBeMovedTo(Position dst) {
+        if (position.equals(dst)) return false;
+        return isReachable(dst);
+    }
+
     protected abstract boolean isReachable(Position dst);
+
     // Most common behaviour. Should be override if needed
+    // TODO add exception throwing when dst is unreachable
     protected Iterator<Position> route(Position dst) {
         int charDirection = Integer.signum(dst.charSubstract(position));
         int numDirection = Integer.signum(dst.numericSubstract(position));

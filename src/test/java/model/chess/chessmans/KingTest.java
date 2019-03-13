@@ -9,40 +9,45 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class RookTest extends ChessmanTest {
+class KingTest extends ChessmanTest {
     @BeforeAll
     void init() {
-        final ChessmanColor defaultColor = ChessmanColor.BLACK;
-        setConstructor((startPosition) -> new Rook(defaultColor, startPosition));
+        final ChessmanColor defaultColor = ChessmanColor.WHITE;
+        setConstructor((startPosition) -> new King(defaultColor, startPosition));
     }
 
     Stream<Arguments> startPositionAndReachableCellsProvider() {
         return Stream.of(
                 arguments(
-                        new Position('g', 7),
+                        new Position('a', 1),
                         Arrays.asList(
-                                // horizontal
-                                new Position('a', 7),
-                                new Position('b', 7),
-                                new Position('c', 7),
+                                // one diagonal
+                                new Position('a', 2),
+                                new Position('b', 1),
+                                new Position('b', 2)
+                        )
+                ),
+                arguments(
+                        new Position('e', 6),
+                        Arrays.asList(
+                                // one diagonal
                                 new Position('d', 7),
                                 new Position('e', 7),
                                 new Position('f', 7),
-                                new Position('h', 7),
-                                // vertical
-                                new Position('g', 1),
-                                new Position('g', 2),
-                                new Position('g', 3),
-                                new Position('g', 4),
-                                new Position('g', 5),
-                                new Position('g', 6),
-                                new Position('g', 8)
+
+                                new Position('d', 5),
+                                new Position('e', 5),
+                                new Position('f', 5),
+
+                                new Position('d', 6),
+                                new Position('f', 6)
                         )
                 )
         );
@@ -66,13 +71,9 @@ class RookTest extends ChessmanTest {
     Stream<Arguments> startPositionAndDstPositionAndExpectedRoute() {
         return Stream.of(
                 arguments(
-                        new Position('g', 7),
-                        new Position('c', 7),
-                        Arrays.asList(
-                                new Position('f', 7),
-                                new Position('e', 7),
-                                new Position('d', 7)
-                        )
+                        new Position('a', 8),
+                        new Position('b', 7),
+                        Collections.emptyList()
                 )
         );
     }
@@ -87,8 +88,16 @@ class RookTest extends ChessmanTest {
     Stream<Arguments> startPositionAndUnreachableDstPosition() {
         return Stream.of(
                 arguments(
-                        new Position('g', 7),
-                        new Position('e', 5)
+                        new Position('c', 7),
+                        new Position('a', 7)
+                ),
+                arguments(
+                        new Position('f', 6),
+                        new Position('g', 1)
+                ),
+                arguments(
+                        new Position('d', 2),
+                        new Position('g', 5)
                 )
         );
     }
@@ -99,4 +108,5 @@ class RookTest extends ChessmanTest {
     void testRouteWhenDoesNotExist(Position startPosition, Position unreachablePosition) {
         super.testRouteWhenDoesNotExist(startPosition, unreachablePosition);
     }
+
 }

@@ -33,20 +33,20 @@ public abstract class ChessmanTest {
         assertEquals(expectedRoute, actualRoute);
     }
 
-    void testIsReachableFalse(final Position startPosition, List<Position> reachableCells) {
+    void testCanBeMovedFalse(final Position startPosition, List<Position> reachableCells) {
         Chessman chessman = constructor.apply(startPosition);
         var nonPossible = new LinkedList<>(Position.getAllPossiblePositions());
         nonPossible.removeAll(reachableCells);
         for (var p : nonPossible) {
-            assertFalse(chessman.isReachable(p));
+            assertFalse(chessman.canBeMovedTo(p), String.format("%s should not be reachable from %s", p, startPosition));
         }
     }
 
-    void testIsReachableTrue(final Position startPosition, List<Position> reachableCells) {
+    void testCanBeMovedTrue(final Position startPosition, List<Position> reachableCells) {
         Chessman chessman = constructor.apply(startPosition);
         // check moves
         for (var p : reachableCells) {
-            assertTrue(chessman.isReachable(p));
+            assertTrue(chessman.canBeMovedTo(p), String.format("%s should be reachable from %s", p, startPosition));
         }
     }
 }

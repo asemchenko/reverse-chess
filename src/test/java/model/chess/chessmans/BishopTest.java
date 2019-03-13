@@ -50,15 +50,15 @@ class BishopTest extends ChessmanTest {
     @ParameterizedTest
     @MethodSource("startPositionAndReachableCellsProvider")
     @Override
-    void testIsReachableTrue(Position startPosition, List<Position> reachableCells) {
-        super.testIsReachableTrue(startPosition, reachableCells);
+    void testCanBeMovedTrue(Position startPosition, List<Position> reachableCells) {
+        super.testCanBeMovedTrue(startPosition, reachableCells);
     }
 
     @ParameterizedTest
     @MethodSource("startPositionAndReachableCellsProvider")
     @Override
-    void testIsReachableFalse(Position startPosition, List<Position> reachableCells) {
-        super.testIsReachableFalse(startPosition, reachableCells);
+    void testCanBeMovedFalse(Position startPosition, List<Position> reachableCells) {
+        super.testCanBeMovedFalse(startPosition, reachableCells);
     }
 
 
