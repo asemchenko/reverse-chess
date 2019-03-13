@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 
 // TODO как реализовать изменение типа фигуры, когда пешка достигает конца поля???
-public class Pawn extends Chessboard.Chessman {
+public class Pawn extends Chessman {
     public Pawn(@NotNull Chessboard board, @NotNull ChessmanColor color, @NotNull Position position) {
         board.super(color, position);
     }

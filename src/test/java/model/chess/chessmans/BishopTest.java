@@ -1,20 +1,15 @@
 package model.chess.chessmans;
 
-import model.chess.Chessboard;
 import model.chess.ChessmanColor;
 import model.chess.Position;
 import org.junit.jupiter.api.Test;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.*;
 
 class BishopTest {
     private static final Position startPosition = new Position('d', 4);
@@ -36,51 +31,46 @@ class BishopTest {
             new Position('f', 2),
             new Position('g', 1)
     );
-    private Chessboard.Chessman bishop;
+    private Chessman bishop;
 
     @Test
-    public void testCanBeMoved() {
-        // preparing
-        Chessboard chessboard = mock(Chessboard.class);
-        // there is only one chessman on the board
-        bishop = new Bishop(chessboard, ChessmanColor.WHITE, startPosition);
-        when(chessboard.get(any())).thenAnswer(new Answer<Chessboard.Chessman>() {
-            @Override
-            public Chessboard.Chessman answer(InvocationOnMock invocationOnMock) throws Throwable {
-                Object p = invocationOnMock.getArgument(0);
-                return startPosition.equals(p) ? bishop : null;
-            }
-        });
+    void testIsReachableTrue() {
+        bishop = new Bishop(ChessmanColor.WHITE, startPosition);
         // check moves
-        for (Position p : Position.getAllPossiblePositions()) {
-            if (possibleMoves.contains(p)) {
-                assertTrue(bishop.canBeMoved(p));
-            } else {
-                assertFalse(bishop.canBeMoved(p), () -> String.format("%s is not a valid move from %s", p, startPosition));
-            }
+        for (var p : possibleMoves) {
+            assertTrue(bishop.isReachable(p));
         }
     }
 
     @Test
-    public void testForbidCaptureAllyFigure() {
-        // preparing
-        Chessboard chessboard = mock(Chessboard.class);
-        // there is only one chessman on the board
-        bishop = new Bishop(chessboard, ChessmanColor.WHITE, startPosition);
-        Chessboard.Chessman ally = mock(Chessboard.Chessman.class);
-        when(ally.getColor()).thenReturn(ChessmanColor.WHITE);
-        when(chessboard.get(any())).thenAnswer(new Answer<Chessboard.Chessman>() {
-            @Override
-            public Chessboard.Chessman answer(InvocationOnMock invocationOnMock) throws Throwable {
-                Position p = invocationOnMock.getArgument(0);
-                if (p.equals(startPosition)) {
-                    return bishop;
-                } else if (p.equals(allyPosition)) {
-                    return ally;
-                }
-                return null;
-            }
-        });
-        assertFalse(bishop.canBeMoved(allyPosition), "Chessman can't capture the same color chessman");
+    void testIsReachableFalse() {
+        bishop = new Bishop(ChessmanColor.WHITE, startPosition);
+        var nonPossible = new LinkedList<>(Position.getAllPossiblePositions());
+        nonPossible.removeAll(possibleMoves);
+        for (var p : nonPossible) {
+            assertFalse(bishop.isReachable(p));
+        }
+    }
+
+    @Test
+    void testRouteWhenExists() {
+        final Position dstPosition = new Position('a', 7);
+        /// right route from startPosition(d4) to dstPosition(a7)
+        final List<Position> rightRoute = Arrays.asList(
+                new Position('c', 5),
+                new Position('b', 6)
+        );
+        bishop = new Bishop(ChessmanColor.WHITE, startPosition);
+        final List<Position> actualRoute = new ArrayList<>();
+        bishop.getRouteTo(dstPosition).forEach(actualRoute::add);
+        assertEquals(rightRoute, actualRoute);
+    }
+
+    @Test
+    void testRouteWhenDoesNotExist() {
+        bishop = new Bishop(ChessmanColor.WHITE, startPosition);
+        // unreachable from `startPosition`
+        final Position dstPosition = new Position('g', 6);
+        assertNull(bishop.getRouteTo(dstPosition));
     }
 }

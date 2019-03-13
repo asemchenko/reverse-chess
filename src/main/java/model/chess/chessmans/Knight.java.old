@@ -5,7 +5,7 @@ import model.chess.ChessmanColor;
 import model.chess.Position;
 import org.jetbrains.annotations.NotNull;
 
-public class Knight extends Chessboard.Chessman {
+public class Knight extends Chessman {
     public Knight(@NotNull Chessboard board, @NotNull ChessmanColor color, @NotNull Position position) {
         board.super(color, position);
     }

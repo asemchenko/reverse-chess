@@ -1,5 +1,6 @@
 package model.chess;
 
+import model.chess.chessmans.Chessman;
 import model.chess.exceptions.ChessException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -11,14 +12,25 @@ public class Chessboard {
     private ChessmanColor currentUserColor;
 
     public void processMove(Move move) throws ChessException {
-        checkForEmptyCell(move);
         checkForIllegalUser(move);
-        Chessman chessman = get(move.getSrcPosition());
-        if (chessman.canBeMoved(move.getDstPosition())) {
-            chessman.move(move.getDstPosition());
+        if (checkMoveRoute(move) && checkForRightEnemy(move)) {
+            move(move);
         } else {
-            throw new ChessException(String.format("%s can not be moved in a such way", chessman));
+            throw new ChessException("Invalid move");
         }
+    }
+
+    private boolean checkMoveRoute(@NotNull Move move) {
+        var src = move.getSrcPosition();
+        var dst = move.getDstPosition();
+        var chessman = get(src);
+        if (Objects.isNull(chessman)) return false;
+        var route = chessman.getRouteTo(dst);
+        if (Objects.isNull(route)) return false;
+        for (Position p : route) {
+            if (get(p) != null) return false;
+        }
+        return true;
     }
 
     private void checkForIllegalUser(@NotNull Move move) throws ChessException {
@@ -28,70 +40,24 @@ public class Chessboard {
         }
     }
 
-    private void checkForEmptyCell(@NotNull Move move) throws ChessException {
+    private boolean checkForRightEnemy(@NotNull Move move) {
         Chessman chessman = get(move.getSrcPosition());
-        if (Objects.isNull(chessman)) {
-            throw new ChessException("Invalid move. There isn't any chessman at " + move.getSrcPosition() + " position");
-        }
+        Chessman enemy = get(move.getDstPosition());
+        return Objects.isNull(enemy) || enemy.getColor() != chessman.getColor();
+    }
+
+    private void move(@NotNull Move move) {
+        set(move.getDstPosition(), get(move.getSrcPosition()));
+        set(move.getSrcPosition(), null);
     }
 
     @Nullable
     public Chessman get(@NotNull Position position) {
-        // FIXME invalid indexation. Should be postion.getIndex() instead of getPosition()
-        return board[position.getCharPosition()][position.getNumericPosition()];
+        return board[position.getCharIndex()][position.getNumericIndex()];
     }
 
     public void set(@NotNull Position position, Chessman value) {
         board[position.getCharPosition()][position.getNumericPosition()] = value;
     }
 
-    public abstract class Chessman {
-        // TODO реализуй во всех фигурах проверку, не бьет ли фигура свою
-        protected ChessmanColor color;
-        protected Position position;
-
-        public Chessman(ChessmanColor color, Position position) {
-            this.color = color;
-            this.position = position;
-        }
-
-        public ChessmanColor getColor() {
-            return color;
-        }
-
-        protected Chessman get(Position position) {
-            return Chessboard.this.get(position);
-        }
-
-        protected void set(Position position, Chessman value) {
-            Chessboard.this.set(position, value);
-        }
-
-        public abstract boolean canBeMoved(Position dst);
-
-        protected void move(Position dst) throws ChessException {
-            if (canBeMoved(dst)) {
-                set(position, null);
-                set(dst, this);
-                position = dst;
-            } else {
-                throw new ChessException("Illegal move");
-            }
-        }
-
-        /**
-         * Checks that at destination position placed right enemy:
-         * <ul>
-         * <li>The opposite color of this chessman</li>
-         * <li>Destination cell is empty</li>
-         * </ul>
-         *
-         * @param dst destination position
-         * @return true if at <code>dst</code> placed right enemy, false otherwise
-         */
-        protected boolean checkForRightEnemy(Position dst) {
-            Chessboard.Chessman enemy = get(dst);
-            return Objects.isNull(enemy) || enemy.getColor() != getColor();
-        }
-    }
 }
