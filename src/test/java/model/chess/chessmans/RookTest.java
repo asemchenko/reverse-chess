@@ -2,80 +2,101 @@ package model.chess.chessmans;
 
 import model.chess.ChessmanColor;
 import model.chess.Position;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.params.provider.Arguments.arguments;
 
-// TODO подумай как избежать дублирования кода тестовых методов для разных фигур
-class RookTest {
-    // ======================================== TEST PARAMETERS =========================================
-    private static final Position startPosition = new Position('g', 7);
-    private static final List<Position> possibleMoves = Arrays.asList(
-            // horizontal
-            new Position('a', 7),
-            new Position('b', 7),
-            new Position('c', 7),
-            new Position('d', 7),
-            new Position('e', 7),
-            new Position('f', 7),
-            new Position('h', 7),
-            // vertical
-            new Position('g', 1),
-            new Position('g', 2),
-            new Position('g', 3),
-            new Position('g', 4),
-            new Position('g', 5),
-            new Position('g', 6),
-            new Position('g', 8)
-    );
-    private static final Position dstPosition = new Position('c', 7);
-    private static final List<Position> dstRoute = Arrays.asList(
-            new Position('f', 7),
-            new Position('e', 7),
-            new Position('d', 7)
-    );
-    private static final Position unreachablePosition = new Position('e', 5);
-    // ==================================================================================================
-    private Rook chessman;
-
-    @BeforeEach
-    void setUp() {
-        chessman = new Rook(ChessmanColor.WHITE, startPosition);
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+class RookTest extends ChessmanTest {
+    @BeforeAll
+    void init() {
+        final ChessmanColor defaultColor = ChessmanColor.BLACK;
+        setConstructor((startPosition) -> new Rook(defaultColor, startPosition));
     }
 
-    @Test
-    void testIsReachableTrue() {
-        // check moves
-        for (var p : possibleMoves) {
-            assertTrue(chessman.isReachable(p));
-        }
+    Stream<Arguments> startPositionAndReachableCellsProvider() {
+        return Stream.of(
+                arguments(
+                        new Position('g', 7),
+                        Arrays.asList(
+                                // horizontal
+                                new Position('a', 7),
+                                new Position('b', 7),
+                                new Position('c', 7),
+                                new Position('d', 7),
+                                new Position('e', 7),
+                                new Position('f', 7),
+                                new Position('h', 7),
+                                // vertical
+                                new Position('g', 1),
+                                new Position('g', 2),
+                                new Position('g', 3),
+                                new Position('g', 4),
+                                new Position('g', 5),
+                                new Position('g', 6),
+                                new Position('g', 8)
+                        )
+                )
+        );
     }
 
-    @Test
-    void testIsReachableFalse() {
-        var nonPossible = new LinkedList<>(Position.getAllPossiblePositions());
-        nonPossible.removeAll(possibleMoves);
-        for (var p : nonPossible) {
-            assertFalse(chessman.isReachable(p));
-        }
+    @ParameterizedTest
+    @MethodSource("startPositionAndReachableCellsProvider")
+    @Override
+    void testIsReachableTrue(Position startPosition, List<Position> reachableCells) {
+        super.testIsReachableTrue(startPosition, reachableCells);
     }
 
-    @Test
-    void testRouteWhenExists() {
-        final List<Position> actualRoute = new ArrayList<>();
-        chessman.getRouteTo(dstPosition).forEach(actualRoute::add);
-        assertEquals(dstRoute, actualRoute);
+    @ParameterizedTest
+    @MethodSource("startPositionAndReachableCellsProvider")
+    @Override
+    void testIsReachableFalse(Position startPosition, List<Position> reachableCells) {
+        super.testIsReachableFalse(startPosition, reachableCells);
     }
 
-    @Test
-    void testRouteWhenDoesNotExist() {
-        // unreachable from `startPosition`
-        assertNull(chessman.getRouteTo(unreachablePosition));
+
+    Stream<Arguments> startPositionAndDstPositionAndExpectedRoute() {
+        return Stream.of(
+                arguments(
+                        new Position('g', 7),
+                        new Position('c', 7),
+                        Arrays.asList(
+                                new Position('f', 7),
+                                new Position('e', 7),
+                                new Position('d', 7)
+                        )
+                )
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource("startPositionAndDstPositionAndExpectedRoute")
+    @Override
+    void testRouteWhenExists(Position startPosition, Position dstPosition, List<Position> expectedRoute) {
+        super.testRouteWhenExists(startPosition, dstPosition, expectedRoute);
+    }
+
+    Stream<Arguments> startPositionAndUnreachableDstPosition() {
+        return Stream.of(
+                arguments(
+                        new Position('g', 7),
+                        new Position('e', 5)
+                )
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource("startPositionAndUnreachableDstPosition")
+    @Override
+    void testRouteWhenDoesNotExist(Position startPosition, Position unreachablePosition) {
+        super.testRouteWhenDoesNotExist(startPosition, unreachablePosition);
     }
 }
