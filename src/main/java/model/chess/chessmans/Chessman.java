@@ -32,7 +32,7 @@ public abstract class Chessman {
         return () -> route(dst);
     }
 
-    public boolean canBeMovedTo(Position dst) {
+    public final boolean canBeMovedTo(Position dst) {
         if (position.equals(dst)) return false;
         return isReachable(dst);
     }
@@ -64,7 +64,12 @@ public abstract class Chessman {
         public boolean hasNext() {
             // FIXME как то не оч создавать новый объект position постоянно
             var nPos = new Position(src);
-            nPos.move(charD, numD);
+            try {
+                nPos.move(charD, numD);
+                // TODO создай отдельный эксепшон на этот случай
+            } catch (IndexOutOfBoundsException e) {
+                return false;
+            }
             return !nPos.equals(dst);
         }
 
