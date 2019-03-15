@@ -1,7 +1,7 @@
 package model.chess.chessmans;
 
-import model.chess.ChessmanColor;
-import model.chess.Position;
+import model.chess.chessboard.Position;
+import model.chess.exceptions.ChessException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -83,7 +83,7 @@ class KnightTest extends ChessmanTest {
     @ParameterizedTest
     @MethodSource("startPositionAndDstPositionAndExpectedRoute")
     @Override
-    void testRouteWhenExists(Position startPosition, Position dstPosition, List<Position> expectedRoute) {
+    void testRouteWhenExists(Position startPosition, Position dstPosition, List<Position> expectedRoute) throws ChessException {
         super.testRouteWhenExists(startPosition, dstPosition, expectedRoute);
     }
 

@@ -1,11 +1,14 @@
 package model.chess.chessmans;
 
-import model.chess.ChessmanColor;
-import model.chess.Position;
+import model.chess.chessboard.Position;
 
 public class King extends Chessman {
     public King(ChessmanColor color, Position position) {
         super(color, position);
+    }
+
+    public King(ChessmanColor color) {
+        super(color);
     }
 
     @Override

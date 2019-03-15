@@ -1,6 +1,7 @@
 package model.chess.chessmans;
 
-import model.chess.Position;
+import model.chess.chessboard.Position;
+import model.chess.exceptions.ChessException;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -23,10 +24,10 @@ public abstract class ChessmanTest {
     void testRouteWhenDoesNotExist(final Position startPosition, final Position unreachablePosition) {
         Chessman chessman = constructor.apply(startPosition);
         // unreachable from `startPosition`
-        assertNull(chessman.getRouteTo(unreachablePosition));
+        assertThrows(ChessException.class, () -> chessman.getRouteTo(unreachablePosition));
     }
 
-    void testRouteWhenExists(final Position startPosition, final Position dstPosition, final List<Position> expectedRoute) {
+    void testRouteWhenExists(final Position startPosition, final Position dstPosition, final List<Position> expectedRoute) throws ChessException {
         Chessman chessman = constructor.apply(startPosition);
         final List<Position> actualRoute = new ArrayList<>();
         chessman.getRouteTo(dstPosition).forEach(actualRoute::add);

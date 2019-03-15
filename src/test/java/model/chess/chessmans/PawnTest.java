@@ -1,7 +1,6 @@
 package model.chess.chessmans;
 
-import model.chess.ChessmanColor;
-import model.chess.Position;
+import model.chess.chessboard.Position;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -117,7 +116,11 @@ class PawnTest extends ChessmanTest {
     @MethodSource("colorAndStartPositionAndDstPositionAndExpectedRoute")
     void testRouteWhenExists(ChessmanColor color, Position startPosition, Position dstPosition, List<Position> expectedRoute) {
         setConstructorWithColor(color);
-        super.testRouteWhenExists(startPosition, dstPosition, expectedRoute);
+        try {
+            super.testRouteWhenExists(startPosition, dstPosition, expectedRoute);
+        } catch (model.chess.exceptions.ChessException e) {
+            e.printStackTrace();
+        }
     }
 
     Stream<Arguments> colorAndStartPositionAndUnreachableDstPosition() {

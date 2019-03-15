@@ -1,5 +1,6 @@
 package model.chess;
 
+import model.chess.chessboard.Position;
 import org.jetbrains.annotations.NotNull;
 
 public class Move {
@@ -27,5 +28,10 @@ public class Move {
 
     public void setDstPosition(@NotNull Position dstPosition) {
         this.dstPosition = dstPosition;
+    }
+
+    @Override
+    public String toString() {
+        return "Move{" + srcPosition + " -> " + dstPosition + " }";
     }
 }

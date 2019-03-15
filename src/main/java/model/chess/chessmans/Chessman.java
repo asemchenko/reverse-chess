@@ -1,7 +1,7 @@
 package model.chess.chessmans;
 
-import model.chess.ChessmanColor;
-import model.chess.Position;
+import model.chess.chessboard.Position;
+import model.chess.exceptions.ChessException;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Iterator;
@@ -15,8 +15,16 @@ public abstract class Chessman {
         this.position = position;
     }
 
+    public Chessman(ChessmanColor color) {
+        this.color = color;
+    }
+
     public final Position getPosition() {
         return position;
+    }
+
+    public void setPosition(Position position) {
+        this.position = position;
     }
 
     public final ChessmanColor getColor() {
@@ -24,10 +32,10 @@ public abstract class Chessman {
     }
 
     @Nullable
-    public final Iterable<Position> getRouteTo(Position dst) {
+    public final Iterable<Position> getRouteTo(Position dst) throws ChessException {
         // FIXME как лучше назвать этот метод? Он возвращает путь, исключая крайние точки
         if (!canBeMovedTo(dst)) {
-            return null;
+            throw new ChessException(dst + " can not be moved to " + position);
         }
         return () -> route(dst);
     }
@@ -40,7 +48,7 @@ public abstract class Chessman {
     protected abstract boolean isReachable(Position dst);
 
     // Most common behaviour. Should be override if needed
-    // TODO add exception throwing when dst is unreachable
+
     protected Iterator<Position> route(Position dst) {
         int charDirection = Integer.signum(dst.charSubstract(position));
         int numDirection = Integer.signum(dst.numericSubstract(position));
@@ -62,12 +70,10 @@ public abstract class Chessman {
 
         @Override
         public boolean hasNext() {
-            // FIXME как то не оч создавать новый объект position постоянно
             var nPos = new Position(src);
-            try {
-                nPos.move(charD, numD);
-                // TODO создай отдельный эксепшон на этот случай
-            } catch (IndexOutOfBoundsException e) {
+            if (Position.canBeMoved(nPos, charD, numD)) {
+                nPos = Position.getMoved(nPos, charD, numD);
+            } else {
                 return false;
             }
             return !nPos.equals(dst);
@@ -75,7 +81,7 @@ public abstract class Chessman {
 
         @Override
         public Position next() {
-            src.move(charD, numD);
+            src = Position.getMoved(src, charD, numD);
             return new Position(src);
         }
     }

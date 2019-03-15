@@ -1,7 +1,6 @@
 package model.chess.chessmans;
 
-import model.chess.ChessmanColor;
-import model.chess.Position;
+import model.chess.chessboard.Position;
 import org.jetbrains.annotations.NotNull;
 
 // TODO как реализовать изменение типа фигуры, когда пешка достигает конца поля???
@@ -10,10 +9,32 @@ public class Pawn extends Chessman {
         super(color, position);
     }
 
+    public Pawn(ChessmanColor color) {
+        super(color);
+    }
+
+    // TODO возможно переименовать в canReach
     @Override
     protected boolean isReachable(Position dst) {
         return checkInitialBigMove(dst)
                 || checkSimpleMove(dst);
+    }
+
+    // TODO возможно добавить метод canCapture в Chessman
+    public boolean canCapture(Position dst) {
+        return canCaptureWhite(dst) || canCaptureBlack(dst);
+    }
+
+    private boolean canCaptureWhite(@NotNull Position dst) {
+        return getColor().equals(ChessmanColor.WHITE)
+                && dst.numericSubstract(position) == 1
+                && dst.charDistance(position) == 1;
+    }
+
+    private boolean canCaptureBlack(@NotNull Position dst) {
+        return getColor().equals(ChessmanColor.BLACK)
+                && dst.numericSubstract(position) == -1
+                && dst.charDistance(position) == 1;
     }
 
     // FIXME возможно есть способ уменьшить кол-во кода

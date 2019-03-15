@@ -1,23 +1,13 @@
-package model.chess;
+package model.chess.chessboard;
 
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
-public class Position {
-    private static final List<Position> ALL_POSITIONS;
-
-    static {
-        List<Position> list = new ArrayList<>();
-        for (int i = 1; i <= 8; i++) {
-            for (int j = 1; j <= 8; j++) {
-                list.add(new Position(i, j));
-            }
-        }
-        ALL_POSITIONS = Collections.unmodifiableList(list);
-    }
-
+// TODO сделай Position immutable
+public final class Position {
+    private static List<Position> ALL_POSITIONS;
     private int charPosition;
     private int numericPosition;
 
@@ -35,18 +25,46 @@ public class Position {
         setNumericPosition(that.getNumericPosition());
     }
 
+    @NotNull
+    @Contract("_, _, _ -> new")
+    public static Position getMoved(@NotNull Position p, int charOffset, int numOffset) {
+        return new Position(p.getCharPosition() + charOffset, p.getNumericPosition() + numOffset);
+    }
+
+    public static boolean canBeMoved(@NotNull Position p, int charOffset, int numOffset) {
+        return checkCharPosition(p.getCharPosition() + charOffset)
+                && checkNumericPosition(p.getNumericPosition() + numOffset);
+    }
+
     public static Collection<Position> getAllPossiblePositions() {
+        if (ALL_POSITIONS == null) {
+            List<Position> list = new ArrayList<>();
+            for (int i = 1; i <= 8; i++) {
+                for (int j = 1; j <= 8; j++) {
+                    list.add(new Position(i, j));
+                }
+            }
+            ALL_POSITIONS = Collections.unmodifiableList(list);
+        }
         return ALL_POSITIONS;
+    }
+
+    private static boolean checkCharPosition(int charPosition) {
+        // charPosition should be in range [1;8]
+        return charPosition > 0 && charPosition <= 8;
+    }
+
+    private static boolean checkNumericPosition(int numPosition) {
+        // numPosition must satisfy such rules as charPosition
+        return checkCharPosition(numPosition);
     }
 
     public int getCharPosition() {
         return charPosition;
     }
 
-    public void setCharPosition(int charPosition) {
-        // FIXME hardcoded 8
-        // TODO add check: charPosition must be greater than 0
-        if (charPosition <= 0 || charPosition > 8) {
+    private void setCharPosition(int charPosition) {
+        if (!checkCharPosition(charPosition)) {
             throw new IndexOutOfBoundsException("Invalid char value of position: " + charPosition);
         }
         this.charPosition = charPosition;
@@ -56,10 +74,8 @@ public class Position {
         return numericPosition;
     }
 
-    public void setNumericPosition(int numericPosition) {
-        // FIXME hardcoded 8
-        // TODO add check: numeric must be greater than 0
-        if (numericPosition <= 0 || numericPosition > 8) {
+    private void setNumericPosition(int numericPosition) {
+        if (!checkNumericPosition(numericPosition)) {
             throw new IndexOutOfBoundsException("Invalid numeric value of position: " + numericPosition);
         }
         this.numericPosition = numericPosition;
@@ -79,11 +95,6 @@ public class Position {
 
     public int numericSubstract(@NotNull Position other) {
         return getNumericPosition() - other.getNumericPosition();
-    }
-
-    public void move(int charOffset, int numericOffset) {
-        setNumericPosition(getNumericPosition() + numericOffset);
-        setCharPosition(getCharPosition() + charOffset);
     }
 
     public int getCharIndex() {
@@ -111,11 +122,6 @@ public class Position {
 
     @Override
     public String toString() {
-        return String.format("{Position %c:%d}", 'a' + getCharIndex(), getNumericPosition());
+        return String.format("%c%d", 'a' + getCharIndex(), getNumericPosition());
     }
-
-    /* TODO add getters
-     *  getNumericIndex
-     *  getCharIndex
-     */
 }

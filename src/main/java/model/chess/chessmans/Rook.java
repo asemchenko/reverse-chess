@@ -1,12 +1,15 @@
 package model.chess.chessmans;
 
-import model.chess.ChessmanColor;
-import model.chess.Position;
+import model.chess.chessboard.Position;
 
 
 public class Rook extends Chessman {
     public Rook(ChessmanColor color, Position position) {
         super(color, position);
+    }
+
+    public Rook(ChessmanColor color) {
+        super(color);
     }
 
     @Override

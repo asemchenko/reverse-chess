@@ -1,12 +1,15 @@
 package model.chess.chessmans;
 
-import model.chess.ChessmanColor;
-import model.chess.Position;
+import model.chess.chessboard.Position;
 import org.jetbrains.annotations.NotNull;
 
 public class Bishop extends Chessman {
     public Bishop(ChessmanColor color, Position position) {
         super(color, position);
+    }
+
+    public Bishop(ChessmanColor color) {
+        super(color);
     }
 
     /**

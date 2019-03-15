@@ -1,13 +1,16 @@
 package model.chess.chessmans;
 
-import model.chess.ChessmanColor;
-import model.chess.Position;
+import model.chess.chessboard.Position;
 
 import java.util.Iterator;
 
 public class Knight extends Chessman {
     public Knight(ChessmanColor color, Position position) {
         super(color, position);
+    }
+
+    public Knight(ChessmanColor color) {
+        super(color);
     }
 
     @Override
