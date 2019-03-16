@@ -4,6 +4,7 @@ import model.chess.chessboard.Position;
 import model.chess.exceptions.ChessException;
 import org.jetbrains.annotations.Nullable;
 
+import javax.print.DocFlavor;
 import java.util.Iterator;
 
 public abstract class Chessman {
@@ -23,7 +24,7 @@ public abstract class Chessman {
         return position;
     }
 
-    public void setPosition(Position position) {
+    public final void setPosition(Position position) {
         this.position = position;
     }
 
@@ -35,7 +36,7 @@ public abstract class Chessman {
     public final Iterable<Position> getRouteTo(Position dst) throws ChessException {
         // FIXME как лучше назвать этот метод? Он возвращает путь, исключая крайние точки
         if (!canBeMovedTo(dst)) {
-            throw new ChessException(dst + " can not be moved to " + position);
+            throw new ChessException(position + " can not be moved to " + dst);
         }
         return () -> route(dst);
     }
@@ -85,5 +86,15 @@ public abstract class Chessman {
             return new Position(src);
         }
     }
+
+    public final char toChar() {
+        char c = getCharRepresentationIgnoreColor();
+        if (color.equals(ChessmanColor.WHITE)) {
+            return Character.toUpperCase(c);
+        }
+        return Character.toLowerCase(c);
+    }
+
+    protected abstract char getCharRepresentationIgnoreColor();
 
 }

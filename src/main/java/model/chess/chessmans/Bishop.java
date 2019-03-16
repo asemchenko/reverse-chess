@@ -25,4 +25,9 @@ public class Bishop extends Chessman {
         int charD = position.charDistance(dst);
         return numD == charD;
     }
+
+    @Override
+    public char getCharRepresentationIgnoreColor() {
+        return 'b';
+    }
 }

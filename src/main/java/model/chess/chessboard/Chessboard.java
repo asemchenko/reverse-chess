@@ -4,6 +4,11 @@ import model.chess.chessmans.Chessman;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
+
 /**
  * Container for chessmans
  */
@@ -46,7 +51,7 @@ public class Chessboard {
      */
     @Nullable
     public Chessman get(@NotNull Position position) {
-        return board[position.getCharIndex()][position.getNumericIndex()];
+        return board[position.getNumericIndex()][position.getCharIndex()];
     }
 
     /**
@@ -56,8 +61,18 @@ public class Chessboard {
      * @param value    chessman
      */
     public void set(@NotNull Position position, Chessman value) {
-        value.setPosition(position);
-        board[position.getCharPosition()][position.getNumericPosition()] = value;
+        if (Objects.nonNull(value)) {
+            value.setPosition(position);
+        }
+        board[position.getNumericIndex()][position.getCharIndex()] = value;
+    }
+
+    public List<List<Chessman>> asList() {
+        List<List<Chessman>> b = new ArrayList<>(8);
+        for (var l : board) {
+            b.add(Arrays.asList(l));
+        }
+        return b;
     }
 
     /**

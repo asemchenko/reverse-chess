@@ -11,6 +11,13 @@ public final class Position {
     private int charPosition;
     private int numericPosition;
 
+    public Position(String p) {
+        char charPos = p.charAt(0);
+        int numPos = Integer.valueOf(p.substring(1));
+        setCharPosition(charPos - 'a' + 1);
+        setNumericPosition(numPos);
+    }
+
     public Position(int charPosition, int numericPosition) {
         setCharPosition(charPosition);
         setNumericPosition(numericPosition);

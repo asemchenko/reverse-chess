@@ -27,4 +27,9 @@ public class Knight extends Chessman {
         int numDirection = dst.numericSubstract(position);
         return new RouteIterator(position, dst, charDirection, numDirection);
     }
+
+    @Override
+    protected char getCharRepresentationIgnoreColor() {
+        return 'n';
+    }
 }

@@ -44,10 +44,10 @@ public class ChessboardFiller {
     private void fillSecondLine(ChessmanFactory f, int horizontal) {
         int charD = 1;
         int numD = 0;
-        for (Position p = new Position('a', horizontal);
-             Position.canBeMoved(p, charD, numD);
-             p = Position.getMoved(p, charD, numD)) {
+        Position p = new Position('a', horizontal);
+        for (; Position.canBeMoved(p, charD, numD); p = Position.getMoved(p, charD, numD)) {
             board.set(p, f.createPawn());
         }
+        board.set(p, f.createPawn());
     }
 }

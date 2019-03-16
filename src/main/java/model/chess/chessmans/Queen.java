@@ -17,4 +17,9 @@ public class Queen extends Chessman {
         return new Rook(getColor(), getPosition()).isReachable(dst)
                 || new Bishop(getColor(), getPosition()).isReachable(dst);
     }
+
+    @Override
+    protected char getCharRepresentationIgnoreColor() {
+        return 'q';
+    }
 }

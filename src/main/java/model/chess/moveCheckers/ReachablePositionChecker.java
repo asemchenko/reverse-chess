@@ -21,7 +21,7 @@ public class ReachablePositionChecker extends MoveChecker {
         Chessman c = board.get(move.getSrcPosition());
         // TODO придумай как убрать instanceof
         if (c instanceof Pawn) {
-
+            checkPawn(move);
         } else
             checkRouteOrThrow(move);
     }
@@ -32,7 +32,7 @@ public class ReachablePositionChecker extends MoveChecker {
         Chessman enemy = board.get(move.getDstPosition());
         // если этот ход - захват пешкой фигуры
         if (Objects.nonNull(enemy) && pawn.canCapture(move.getDstPosition())) {
-
+            // do nothing
         } else { // проверяем обычный ход пешки
             checkRouteOrThrow(move);
         }

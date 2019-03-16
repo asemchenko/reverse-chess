@@ -16,4 +16,9 @@ public class King extends Chessman {
         return position.charDistance(dst) <= 1
                 && position.numericDistance(dst) <= 1;
     }
+
+    @Override
+    protected char getCharRepresentationIgnoreColor() {
+        return 'k';
+    }
 }

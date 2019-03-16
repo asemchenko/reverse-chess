@@ -20,4 +20,9 @@ public class Rook extends Chessman {
         return (charD == 0 && numD > 0)
                 || (charD > 0 && numD == 0);
     }
+
+    @Override
+    protected char getCharRepresentationIgnoreColor() {
+        return 'r';
+    }
 }

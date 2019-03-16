@@ -69,4 +69,9 @@ public class Pawn extends Chessman {
                 && dst.numericSubstract(position) == -1
                 && dst.charSubstract(position) == 0;
     }
+
+    @Override
+    protected char getCharRepresentationIgnoreColor() {
+        return 'p';
+    }
 }
