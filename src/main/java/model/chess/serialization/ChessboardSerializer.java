@@ -17,7 +17,7 @@ public class ChessboardSerializer {
             StringBuilder builder = new StringBuilder();
             for (var c : l) {
                 if (Objects.isNull(c)) {
-                    builder.append(".");
+                    builder.append("·");
                 } else {
                     builder.append(c.toChar());
                 }
