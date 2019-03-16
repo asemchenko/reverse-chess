@@ -1,7 +1,7 @@
 package model.chess.moveCheckers;
 
-import model.chess.chessboard.Chessboard;
 import model.chess.Move;
+import model.chess.chessboard.Chessboard;
 import model.chess.chessmans.Chessman;
 import model.chess.exceptions.ChessException;
 

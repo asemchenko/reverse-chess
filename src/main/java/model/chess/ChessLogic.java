@@ -5,10 +5,7 @@ import model.chess.chessmans.ChessmanColor;
 import model.chess.chessmans.factory.BlackFactory;
 import model.chess.chessmans.factory.WhiteFactory;
 import model.chess.exceptions.ChessException;
-import model.chess.moveCheckers.FigureColorChecker;
-import model.chess.moveCheckers.MoveChecker;
-import model.chess.moveCheckers.ReachablePositionChecker;
-import model.chess.moveCheckers.RightEnemyChecker;
+import model.chess.moveCheckers.*;
 import model.chess.serialization.ChessboardSerializer;
 import model.chess.serialization.SerializedBoard;
 import org.jetbrains.annotations.Contract;
@@ -24,9 +21,12 @@ public class ChessLogic {
         board = new ChessboardFiller(new WhiteFactory(), new BlackFactory(),
                 new Chessboard())
                 .fill();
-        moveChecker = new FigureColorChecker(this::getCurrentUserColor, board);
-        moveChecker.setSuccessor(new ReachablePositionChecker(board))
-                .setSuccessor(new RightEnemyChecker(board));
+        moveChecker = new ChessmanExistsChecker(board);
+        moveChecker
+                .setSuccessor(new FigureColorChecker(this::getCurrentUserColor, board))
+                .setSuccessor(new DestinationChecker(board))
+                .setSuccessor(new RightEnemyChecker(board))
+                .setSuccessor(new RouteChecker(board));
         chessboardSerializer = new ChessboardSerializer(board);
     }
 

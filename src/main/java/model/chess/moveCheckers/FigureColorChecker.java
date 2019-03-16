@@ -6,7 +6,6 @@ import model.chess.chessmans.Chessman;
 import model.chess.chessmans.ChessmanColor;
 import model.chess.exceptions.ChessException;
 
-import java.util.Objects;
 import java.util.function.Supplier;
 
 public class FigureColorChecker extends MoveChecker {
@@ -21,9 +20,6 @@ public class FigureColorChecker extends MoveChecker {
     @Override
     public void validate(Move move) throws ChessException {
         Chessman c = board.get(move.getSrcPosition());
-        if (Objects.isNull(c)) {
-            throw new ChessException("There is no any chessman at " + move.getSrcPosition());
-        }
         if (!c.getColor().equals(getRightColor())) {
             throw new ChessException(String.format("%s is going now", getRightColor()));
         }

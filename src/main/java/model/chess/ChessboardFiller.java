@@ -45,7 +45,7 @@ public class ChessboardFiller {
         int charD = 1;
         int numD = 0;
         Position p = new Position('a', horizontal);
-        for (; Position.canBeMoved(p, charD, numD); p = Position.getMoved(p, charD, numD)) {
+        for (; p.canBeMoved(charD, numD); p = p.move(charD, numD)) {
             board.set(p, f.createPawn());
         }
         board.set(p, f.createPawn());

@@ -56,15 +56,15 @@ class KingTest extends ChessmanTest {
     @ParameterizedTest
     @MethodSource("startPositionAndReachableCellsProvider")
     @Override
-    void testCanBeMovedTrue(Position startPosition, List<Position> reachableCells) {
-        super.testCanBeMovedTrue(startPosition, reachableCells);
+    void testCanReachTrue(Position startPosition, List<Position> reachableCells) {
+        super.testCanReachTrue(startPosition, reachableCells);
     }
 
     @ParameterizedTest
     @MethodSource("startPositionAndReachableCellsProvider")
     @Override
-    void testCanBeMovedFalse(Position startPosition, List<Position> reachableCells) {
-        super.testCanBeMovedFalse(startPosition, reachableCells);
+    void testCanReachFalse(Position startPosition, List<Position> reachableCells) {
+        super.testCanReachFalse(startPosition, reachableCells);
     }
 
 

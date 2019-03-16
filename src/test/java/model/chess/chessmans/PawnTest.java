@@ -21,7 +21,6 @@ class PawnTest extends ChessmanTest {
     }
 
     Stream<Arguments> colorAndStartPositionAndReachableCellsProvider() {
-        // TODO как будет обрабатыватся захват пешкой какой-то фигуры? Пешка ведь бьет не так же как ходит
         return Stream.of(
                 // WHITE INITIAL MOVE
                 arguments(
@@ -62,16 +61,16 @@ class PawnTest extends ChessmanTest {
 
     @ParameterizedTest
     @MethodSource("colorAndStartPositionAndReachableCellsProvider")
-    void testCanBeMovedTrue(ChessmanColor color, Position startPosition, List<Position> reachableCells) {
+    void testCanReachTrue(ChessmanColor color, Position startPosition, List<Position> reachableCells) {
         setConstructorWithColor(color);
-        super.testCanBeMovedTrue(startPosition, reachableCells);
+        super.testCanReachTrue(startPosition, reachableCells);
     }
 
     @ParameterizedTest
     @MethodSource("colorAndStartPositionAndReachableCellsProvider")
-    void testCanBeMovedFalse(ChessmanColor color, Position startPosition, List<Position> reachableCells) {
+    void testCanReachFalse(ChessmanColor color, Position startPosition, List<Position> reachableCells) {
         setConstructorWithColor(color);
-        super.testCanBeMovedFalse(startPosition, reachableCells);
+        super.testCanReachFalse(startPosition, reachableCells);
     }
 
 

@@ -13,7 +13,6 @@ public class Queen extends Chessman {
 
     @Override
     protected boolean isReachable(Position dst) {
-        // TODO вроде ж норм варик?
         return new Rook(getColor(), getPosition()).isReachable(dst)
                 || new Bishop(getColor(), getPosition()).isReachable(dst);
     }

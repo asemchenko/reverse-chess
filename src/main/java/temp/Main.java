@@ -46,10 +46,10 @@ public class Main {
 
     private static Move readMove() {
         System.out.println();
-        System.out.print("Input move: ");
+        System.out.print("Input move (e.g. 'e2-e4'): ");
         System.out.flush();
         String input = scanner.next();
-        var pos = input.split("-");
+        var pos = input.split("-|:");
         return new Move(new Position(pos[0]), new Position(pos[1]));
     }
 }

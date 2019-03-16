@@ -5,7 +5,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
-// TODO сделай Position immutable
 public final class Position {
     private static List<Position> ALL_POSITIONS;
     private int charPosition;
@@ -32,17 +31,6 @@ public final class Position {
         setNumericPosition(that.getNumericPosition());
     }
 
-    @NotNull
-    @Contract("_, _, _ -> new")
-    public static Position getMoved(@NotNull Position p, int charOffset, int numOffset) {
-        return new Position(p.getCharPosition() + charOffset, p.getNumericPosition() + numOffset);
-    }
-
-    public static boolean canBeMoved(@NotNull Position p, int charOffset, int numOffset) {
-        return checkCharPosition(p.getCharPosition() + charOffset)
-                && checkNumericPosition(p.getNumericPosition() + numOffset);
-    }
-
     public static Collection<Position> getAllPossiblePositions() {
         if (ALL_POSITIONS == null) {
             List<Position> list = new ArrayList<>();
@@ -56,12 +44,23 @@ public final class Position {
         return ALL_POSITIONS;
     }
 
-    private static boolean checkCharPosition(int charPosition) {
+    @NotNull
+    @Contract("_, _, _ -> new")
+    public Position move(int charOffset, int numOffset) {
+        return new Position(getCharPosition() + charOffset, getNumericPosition() + numOffset);
+    }
+
+    public boolean canBeMoved(int charOffset, int numOffset) {
+        return checkCharPosition(getCharPosition() + charOffset)
+                && checkNumericPosition(getNumericPosition() + numOffset);
+    }
+
+    private boolean checkCharPosition(int charPosition) {
         // charPosition should be in range [1;8]
         return charPosition > 0 && charPosition <= 8;
     }
 
-    private static boolean checkNumericPosition(int numPosition) {
+    private boolean checkNumericPosition(int numPosition) {
         // numPosition must satisfy such rules as charPosition
         return checkCharPosition(numPosition);
     }
@@ -89,18 +88,18 @@ public final class Position {
     }
 
     public int charDistance(@NotNull Position other) {
-        return Math.abs(this.charSubstract(other));
+        return Math.abs(this.charDiff(other));
     }
 
     public int numericDistance(@NotNull Position other) {
-        return Math.abs(this.numericSubstract(other));
+        return Math.abs(this.numericDiff(other));
     }
 
-    public int charSubstract(@NotNull Position other) {
+    public int charDiff(@NotNull Position other) {
         return getCharPosition() - other.getCharPosition();
     }
 
-    public int numericSubstract(@NotNull Position other) {
+    public int numericDiff(@NotNull Position other) {
         return getNumericPosition() - other.getNumericPosition();
     }
 

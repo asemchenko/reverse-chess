@@ -23,8 +23,8 @@ public class Knight extends Chessman {
 
     @Override
     protected Iterator<Position> route(Position dst) {
-        int charDirection = dst.charSubstract(position);
-        int numDirection = dst.numericSubstract(position);
+        int charDirection = dst.charDiff(position);
+        int numDirection = dst.numericDiff(position);
         return new RouteIterator(position, dst, charDirection, numDirection);
     }
 

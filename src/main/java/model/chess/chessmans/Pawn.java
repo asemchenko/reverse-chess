@@ -13,27 +13,26 @@ public class Pawn extends Chessman {
         super(color);
     }
 
-    // TODO возможно переименовать в canReach
     @Override
     protected boolean isReachable(Position dst) {
         return checkInitialBigMove(dst)
                 || checkSimpleMove(dst);
     }
 
-    // TODO возможно добавить метод canCapture в Chessman
+    @Override
     public boolean canCapture(Position dst) {
         return canCaptureWhite(dst) || canCaptureBlack(dst);
     }
 
     private boolean canCaptureWhite(@NotNull Position dst) {
         return getColor().equals(ChessmanColor.WHITE)
-                && dst.numericSubstract(position) == 1
+                && dst.numericDiff(position) == 1
                 && dst.charDistance(position) == 1;
     }
 
     private boolean canCaptureBlack(@NotNull Position dst) {
         return getColor().equals(ChessmanColor.BLACK)
-                && dst.numericSubstract(position) == -1
+                && dst.numericDiff(position) == -1
                 && dst.charDistance(position) == 1;
     }
 
@@ -60,14 +59,14 @@ public class Pawn extends Chessman {
 
     private boolean checkSimpleMoveWhite(@NotNull Position dst) {
         return color.equals(ChessmanColor.WHITE)
-                && dst.numericSubstract(position) == 1
-                && dst.charSubstract(position) == 0;
+                && dst.numericDiff(position) == 1
+                && dst.charDiff(position) == 0;
     }
 
     private boolean checkSimpleMoveBlack(@NotNull Position dst) {
         return color.equals(ChessmanColor.BLACK)
-                && dst.numericSubstract(position) == -1
-                && dst.charSubstract(position) == 0;
+                && dst.numericDiff(position) == -1
+                && dst.charDiff(position) == 0;
     }
 
     @Override
