@@ -26,7 +26,8 @@ public class ChessLogic {
                 .setSuccessor(new FigureColorChecker(this::getCurrentUserColor, board))
                 .setSuccessor(new DestinationChecker(board))
                 .setSuccessor(new RightEnemyChecker(board))
-                .setSuccessor(new RouteChecker(board));
+                .setSuccessor(new RouteChecker(board))
+                .setSuccessor(new MustCaptureChecker(board));
         chessboardSerializer = new ChessboardSerializer(board);
     }
 

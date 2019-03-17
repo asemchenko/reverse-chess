@@ -2,9 +2,11 @@ package model.chess.chessmans;
 
 import model.chess.chessboard.Position;
 import model.chess.exceptions.ChessException;
+import model.chess.moveCheckers.RouteChecker;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Iterator;
+import java.util.Objects;
 
 public abstract class Chessman {
     protected ChessmanColor color;
@@ -112,6 +114,23 @@ public abstract class Chessman {
             this.numD = numD;
         }
 
+        /**
+         * Creates route iterator that walk over the board
+         * with a specified step until it go out of board
+         * The first element that iterator returns IS NOT
+         * a <code>src</code> position. The first element
+         * is a result of moving src on a specified offsets.
+         * @param src source position
+         * @param charD step size on a char direction
+         * @param numD step size on a numeric direction
+         */
+        public RouteIterator(Position src, int charD, int numD) {
+            this.src = new Position(src);
+            this.charD = charD;
+            this.numD = numD;
+            this.dst = null;
+        }
+
         @Override
         public boolean hasNext() {
             var nPos = new Position(src);
@@ -130,4 +149,23 @@ public abstract class Chessman {
         }
     }
 
+    /**
+     * Find all cells that can attack current chessman
+     * @return range of cells that can be potentially attacked by current chessman
+     */
+    public abstract Iterable<Position> getUnderAttack(); // TODO покрой тестами этот метод
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Chessman chessman = (Chessman) o;
+        return getColor() == chessman.getColor() &&
+                Objects.equals(getPosition(), chessman.getPosition());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getColor(), getPosition());
+    }
 }
