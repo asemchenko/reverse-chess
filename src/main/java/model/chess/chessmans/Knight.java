@@ -1,5 +1,6 @@
 package model.chess.chessmans;
 
+import com.google.common.collect.Iterables;
 import model.chess.chessboard.Position;
 
 import java.util.Iterator;
@@ -26,6 +27,24 @@ public class Knight extends Chessman {
         int charDirection = dst.charDiff(position);
         int numDirection = dst.numericDiff(position);
         return new RouteIterator(position, dst, charDirection, numDirection);
+    }
+
+    @Override
+    public Iterable<Position> getUnderAttack() {
+        // TODO стремный код, отрефакторь обязательно, такое же и в остальных классах
+        return Iterables.concat(
+                () -> new RouteIterator(getPosition(), 1, 2),
+                () -> new RouteIterator(getPosition(), -1, 2),
+
+                () -> new RouteIterator(getPosition(), 2, 1),
+                () -> new RouteIterator(getPosition(), 2, -1),
+
+                () -> new RouteIterator(getPosition(), -2, 1),
+                () -> new RouteIterator(getPosition(), -2, -1),
+
+                () -> new RouteIterator(getPosition(), 1, -2),
+                () -> new RouteIterator(getPosition(), -1, -2)
+        );
     }
 
     @Override

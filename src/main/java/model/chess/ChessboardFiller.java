@@ -31,14 +31,14 @@ public class ChessboardFiller {
 
 
     private void fillFirstLine(ChessmanFactory f, int horizontal) {
-        board.set(new Position('a', horizontal), f.createRook());
-        board.set(new Position('b', horizontal), f.createKnight());
-        board.set(new Position('c', horizontal), f.createBishop());
-        board.set(new Position('d', horizontal), f.createQueen());
-        board.set(new Position('e', horizontal), f.createKing());
-        board.set(new Position('f', horizontal), f.createBishop());
-        board.set(new Position('g', horizontal), f.createKnight());
-        board.set(new Position('h', horizontal), f.createRook());
+        board.put(new Position('a', horizontal), f.createRook());
+        board.put(new Position('b', horizontal), f.createKnight());
+        board.put(new Position('c', horizontal), f.createBishop());
+        board.put(new Position('d', horizontal), f.createQueen());
+        board.put(new Position('e', horizontal), f.createKing());
+        board.put(new Position('f', horizontal), f.createBishop());
+        board.put(new Position('g', horizontal), f.createKnight());
+        board.put(new Position('h', horizontal), f.createRook());
     }
 
     private void fillSecondLine(ChessmanFactory f, int horizontal) {
@@ -46,8 +46,8 @@ public class ChessboardFiller {
         int numD = 0;
         Position p = new Position('a', horizontal);
         for (; p.canBeMoved(charD, numD); p = p.move(charD, numD)) {
-            board.set(p, f.createPawn());
+            board.put(p, f.createPawn());
         }
-        board.set(p, f.createPawn());
+        board.put(p, f.createPawn());
     }
 }

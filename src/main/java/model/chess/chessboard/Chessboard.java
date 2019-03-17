@@ -38,8 +38,8 @@ public class Chessboard {
      */
     public void move(Position src, Position dst) {
         Chessman c = get(src);
-        set(src, null);
-        set(dst, c);
+        put(src, null);
+        put(dst, c);
     }
 
     /**
@@ -60,11 +60,17 @@ public class Chessboard {
      * @param position position
      * @param value    chessman
      */
-    public void set(@NotNull Position position, Chessman value) {
+    public void put(@NotNull Position position, Chessman value) {
         if (Objects.nonNull(value)) {
             value.setPosition(position);
         }
         board[position.getNumericIndex()][position.getCharIndex()] = value;
+    }
+
+    public Chessman remove(Position position) {
+        Chessman c = get(position);
+        put(position, null);
+        return c;
     }
 
     public List<List<Chessman>> asList() {

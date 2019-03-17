@@ -1,5 +1,6 @@
 package model.chess.chessmans;
 
+import com.google.common.collect.Iterables;
 import model.chess.chessboard.Position;
 import org.jetbrains.annotations.NotNull;
 
@@ -24,6 +25,16 @@ public class Bishop extends Chessman {
         int numD = position.numericDistance(dst);
         int charD = position.charDistance(dst);
         return numD == charD;
+    }
+
+    @Override
+    public Iterable<Position> getUnderAttack() {
+        return Iterables.concat(
+                () -> new RouteIterator(getPosition(), 1, 1),
+                () -> new RouteIterator(getPosition(), 1, -1),
+                () -> new RouteIterator(getPosition(), -1, 1),
+                () -> new RouteIterator(getPosition(), -1, -1)
+        );
     }
 
     @Override

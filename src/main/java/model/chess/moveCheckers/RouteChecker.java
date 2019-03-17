@@ -22,6 +22,14 @@ public class RouteChecker extends MoveChecker {
         }
     }
 
+    public boolean validateNoThrow(Move move) {
+        try {
+            return checkRoute(move);
+        } catch (ChessException e) {
+            return false;
+        }
+    }
+
     private boolean checkRoute(Move move) throws ChessException {
         var src = move.getSrcPosition();
         var dst = move.getDstPosition();

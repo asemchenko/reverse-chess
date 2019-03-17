@@ -3,6 +3,8 @@ package model.chess.chessmans;
 import model.chess.chessboard.Position;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+
 // TODO как реализовать изменение типа фигуры, когда пешка достигает конца поля???
 public class Pawn extends Chessman {
     public Pawn(ChessmanColor color, Position position) {
@@ -72,5 +74,18 @@ public class Pawn extends Chessman {
     @Override
     protected char getCharRepresentationIgnoreColor() {
         return 'p';
+    }
+
+    @Override
+    public Iterable<Position> getUnderAttack() {
+        ArrayList<Position> p = new ArrayList<Position>();
+        int numD = (getColor().equals(ChessmanColor.WHITE) ? 1 : -1);
+        if (position.canBeMoved(1, numD)) {
+            p.add(position.move(1, numD));
+        }
+        if (position.canBeMoved(-1, numD)) {
+            p.add(position.move(-1, numD));
+        }
+        return p;
     }
 }
