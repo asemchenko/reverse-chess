@@ -35,7 +35,7 @@ public class ChessLogic {
         // throws exception if move is invalid
         moveChecker.check(move);
         // if move is valid
-        board.move(move.getSrcPosition(), move.getDstPosition());
+        //board.move(move.getSrcPosition(), move.getDstPosition());
         currentUserColor = currentUserColor.getOpposite();
     }
 

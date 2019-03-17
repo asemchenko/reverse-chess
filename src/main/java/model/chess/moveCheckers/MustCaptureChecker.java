@@ -34,19 +34,37 @@ public class MustCaptureChecker extends MoveChecker {
 
     @Override
     protected void validate(Move move) throws ChessException {
+        // TODO проверка не должен ли бить
+        var srcChessmanColor = board.get(move.getSrcPosition()).getColor();
+        boolean isMoveAnAttack = board.get(move.getDstPosition()) != null;
+        if (!getPossibleAttacks(srcChessmanColor).isEmpty() && !isMoveAnAttack) {
+            throw new ChessException("You must capture");
+        } else if (isMoveAnAttack && !getPossibleAttacks(srcChessmanColor).contains(move)) { // TODO удали, else if тут только в целях отладки
+            throw new Error("An error occurred. It is obviously a programmers guilt");
+        }
         processMove(move);
         printPossibleAttacks();
     }
 
     private void processMove(Move move) {
+//        Position srcPosition = move.getSrcPosition();
+//        Chessman srcChessman = board.remove(srcPosition);
+//        var attackers = getAttackersOfCell(srcPosition);
+//        attackers.forEach(attacker -> updatePossibleAttacksForCell(attacker.getPosition()));
+//        board.put(move.getDstPosition(), srcChessman);
+//        updatePossibleAttacksForCell(move.getDstPosition());
+//        board.remove(move.getDstPosition());
+//        board.put(move.getSrcPosition(), srcChessman);
+
         Position srcPosition = move.getSrcPosition();
         Chessman srcChessman = board.remove(srcPosition);
+        updatePossibleAttacksForCell(srcPosition);
         var attackers = getAttackersOfCell(srcPosition);
-        attackers.forEach(attacker -> updatePossibleAttacksForCell(attacker.getPosition()));
         board.put(move.getDstPosition(), srcChessman);
+        attackers.forEach(attacker -> updatePossibleAttacksForCell(attacker.getPosition()));
+        var newAttackers = getAttackersOfCell(move.getDstPosition());
+        newAttackers.forEach(attacker -> updatePossibleAttacksForCell(attacker.getPosition()));
         updatePossibleAttacksForCell(move.getDstPosition());
-        board.remove(move.getDstPosition());
-        board.put(move.getSrcPosition(), srcChessman);
     }
 
     /**
@@ -85,7 +103,11 @@ public class MustCaptureChecker extends MoveChecker {
                     .filter(position -> routeChecker.validateNoThrow(new Move(cellPosition, position)))
                     .collect(Collectors.toSet());
             // updating
-            possibleAttacks.put(cellPosition, attacks);
+            if (!attacks.isEmpty()) {
+                possibleAttacks.put(cellPosition, attacks);
+            } else {
+                possibleAttacks.remove(cellPosition);
+            }
         }
     }
 
@@ -103,9 +125,9 @@ public class MustCaptureChecker extends MoveChecker {
     }
 
     private void printPossibleAttacks() {
-        System.out.println("\n\n\n=================== POSSIBLE WHITE ATTACKS ===================");
+        System.out.println("\n=================== POSSIBLE WHITE ATTACKS ===================");
         getPossibleAttacks(ChessmanColor.WHITE).forEach(System.out::println);
-        System.out.println("\n\n\n=================== POSSIBLE BLACK ATTACKS ===================\n\n\n");
+        System.out.println("=================== POSSIBLE BLACK ATTACKS ===================\n");
         getPossibleAttacks(ChessmanColor.BLACK).forEach(System.out::println);
     }
 }
