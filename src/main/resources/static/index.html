@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ChessChat</title>
+</head>
+<body>
+<form id="usernameForm" name="usernameForm">
+    <input type="text" id="name" autocomplete="off">
+    <button type="submit">Connect</button>
+</form>
+<h1>Global Chat </h1>
+<div id="chat-page">
+    <ul id="messageArea">
+
+    </ul>
+    <form id="messageForm" name="messageForm" nameForm="messageForm">
+        <div class="form-group">
+            <div class="input-group clearfix">
+                <input type="text" id="message" placeholder="Type a message..." autocomplete="off" class="form-control"/>
+                <button type="submit" class="accent username-submit">Send</button>
+                <!-- <button type="submit" class="disconect">Disconect</button> -->
+            </div>
+        </div>
+    </form>
+</div>
+<h1>Private Chat</h1>
+<form id="usernameFormForPrivateChatting" name="usernameFormForPrivateChatting">
+    To: <input type="text" id="usernameForPrivateChat" autocomplete="off">
+    <button type="submit">Choose User</button>
+</form>
+<div id="private-chat-page">
+    <ul id="privateChatMessageArea">
+
+    </ul>
+    <form id="privateChatMessageForm" name="privateChatMessageForm" nameForm="privateChatMessageForm">
+        <div class="form-group">
+            <div class="input-group clearfix">
+                <input type="text" id="privateMessage" placeholder="Type a message..." autocomplete="off" class="form-control"/>
+                <button type="submit" class="accent username-submit">Send</button>
+                <!-- <button type="submit" class="disconect">Disconect</button> -->
+            </div>
+        </div>
+    </form>
+</div>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.1.4/sockjs.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+<script src="/js/mainChat.js"></script>
+<script src="/js/privateChat.js"></script>
+</body>
+</html>
